@@ -1,0 +1,174 @@
+Pluralsight
+
+
+Class: Working with Classes and Interfaces in Java
+
+Comparable interface
+  Contract for Ordering
+  Sorting utility don't need to understand the class
+  implement comeparTo(Object)
+
+
+public int compareTo(Object o) {
+  Passenger p = (Passenger) o;
+  returnValue = p.memberValue - this.memberValue;  (Negative= this passenger is ordered higher.)
+  if (returnValue == ) {
+    returnValue = p.otherStatus = this.otherStatus;
+  }
+  return returnValue;
+}
+
+Passenger [] passengers = {...}
+Arrays.sort(passengers);  // utilizes Comparable - reorders the array.
+
+
+Generics
+
+public interface Comparable<T>
+
+Allows strong typing in the compiler.
+***** Take the class on Java Generics.
+
+Implemented Interfaces are separated by commas
+
+public class Flight implements Comparable<Flight>, Iterable<Passenger>
+
+  public int compareTo(Flight flight) {...}
+
+  public Iterator<Passenger> iterator() {
+    passengerList.iterator();
+  }
+
+Declaring Interfaces
+  Methods: Name, parameters, return type (Implicitly public)
+  Constant Fields: Typed named values (Implicitly public final static)
+
+Extending Interfaces (only once)
+  Derived interface inplements the base interface.
+
+Getting input from the commandline in Java ? 8/11?
+
+System.out.println("This is a message - enter something");
+Scanner scanner = new Scanner(System.in);
+String userInput = scanner.nextline();
+
+Default Methods:
+  An interface implements a default behavior in case the implementing class does not implement that method.
+  Good for adding methods to already published interfaces.
+
+Class: ReflectionAPI and Method Handles
+Jose Paumard - https://github.com/JosePaumard
+
+
+Reflection
+
+Class - you cannot create a class instance. (exceptions exist)
+
+You can query an object for its class
+you can get a class by its name, known at compiletime or runtime
+
+getClass()
+
+  String hello = "hello";
+  Class helloClass = hello.getClass();
+
+There is only one instance of Class for a given class type.
+
+Class<?> helloClass = "Hello".getClass(); // works
+Class<String> helloClass = "Hello".getClass(); // compile error
+
+Class is a class with a parameter.
+
+Class<? extends String> helloClass = "Hello".getClass();// compiles.
+
+You can access the Class with the class field:
+
+  Class<?> stringClass = String.class;
+
+You an use the Factory method to get a reference to Class
+
+  String className = "java.lang.String";
+  Class<?> stringClass = Class.forName(className);
+
+  This method can throw Exceptions!
+  Throws security related exceptions
+  Name exceptions
+  Fragile method but much more powerful.
+
+Accessing fields
+
+class.getField("age");
+Field [] fields = clss.getDeclaredFields(); // all files in this class all visiblities.
+Field [] fields = clss.getFields(); // public fields and fields from super class.
+
+Accessing methods
+
+getMethod(name, types)
+Method method = clss.getMethod("setName", String.class);
+Method method = clss.getDeclaredMethods(); //delcared in classs
+
+Method method = clss.getMethods(); // public methods including inherited
+
+Same pattern for Constructors
+
+
+Modifiers:
+  static
+  abstract
+  final
+  public /private/ protected
+  synchronized / volitile
+  native
+
+When you call getField/getMethod you will get all no mater the modifier
+
+getModifier()
+This returns int.
+It requires a pattern to get the value of the modifiers from that integer.
+
+modifier is a field of bits.
+
+it is possible to check if a field is public by using the correct bit mask:
+
+Field field = clss.get Field("name");
+int modifiers = field.getModifiers();
+boolean isPublic = modifiers &0x00000001
+
+This is tedious and dangerous!
+
+The right pattern is to use the Modifier Factory:
+
+boolean isPublic = Modifier.isPublic(modifiers);
+
+
+CREATING AN OBJECT METAMODEL Using Annotations and Reflection
+
+What to save and how to save it = metamodel
+
+Add metadata to the class
+
+public class Person {
+  @PrimaryKey
+  private long id;
+  @Column
+  private int age;
+  @Column
+  private String name;
+
+  // g's and s's
+}
+
+
+public @interface PrimaryKey{}
+public @interface Column {}
+
+Setting values pattern:
+
+Person o = ...;
+Class<?> clss = o.getClass();
+Field field = clss.getDeclaredField("name");
+field.setValue(o, "Sarah");
+
+
+
+
